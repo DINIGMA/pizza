@@ -1,6 +1,7 @@
 <script setup>
 import Card from '@/components/Card.vue'
-
+import { useStore } from 'vuex'
+import { computed, ref } from 'vue'
 defineProps({
   items: Array
 })
@@ -17,6 +18,7 @@ defineProps({
       :imageUrl="item.imageUrl"
       :price="item.price"
       :category="item.category"
+      :item="item"
     />
   </div>
 </template>

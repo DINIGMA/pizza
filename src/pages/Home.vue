@@ -1,23 +1,16 @@
 <script setup>
 import CardList from '@/components/CardList.vue'
+import CounterForm from '@/components/CounterForm.vue'
+import Loading from '@/components/Loading.vue'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import axios from 'axios'
 import { useStore } from 'vuex'
-
-// const items = ref([])
 
 const store = useStore()
 
 const pizza = computed(() => store.getters.getPizza)
 const otherProduct = computed(() => store.getters.getOtherProduct)
-
-console.log(pizza)
-console.log(pizza.value)
-
-const cart = computed(() => store.getters.cartProduct)
-
-// const sortBy = ref('name')
-// const sortByRadio = ref('')
+const isLoading = computed(() => store.getters.getLoading)
 
 const filters = reactive({
   sortBy: 'name',
@@ -25,13 +18,14 @@ const filters = reactive({
 })
 
 const updateFilters = () => {
+  console.log(111)
   store.dispatch('updateFilters', filters)
 }
 
-const getPizzaType = () => {
-  const typeSet = new Set(pizza.value.map((item) => item.type))
-  return [...typeSet]
-}
+// const getPizzaType = () => {
+//   const typeSet = new Set(pizza.value.map((item) => item.type))
+//   return [...typeSet]
+// }
 
 // const changeSelect = (event) => {
 //   filters.sortBy = event.target.value
@@ -51,77 +45,8 @@ const getOtherProductsByCategory = (category) => {
   return otherProduct.value.filter((item) => item.category === category)
 }
 
-// const getItems = async () => {
-//   try {
-//     const params = {
-//       sortBy: filters.sortBy,
-//       category: ['pizza', 'snack', 'drink', 'sauce']
-//     }
-
-//     if (filters.sortByRadio && filters.sortByRadio != 'all') {
-//       params.type = `*${filters.sortByRadio}*`
-//       console.log(params)
-//     }
-
-//     const { data } = await axios.get(`https://b1f8182cac6670e1.mokky.dev/items`, {
-//       params
-//     })
-//     console.log(items.value)
-//     items.value = data
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
-
-// const getPizzas = async () => {
-//   try {
-//     const params = {
-//       sortBy: filters.sortBy
-//     }
-
-//     if (filters.sortByRadio && filters.sortByRadio != 'all') {
-//       params.type = `*${filters.sortByRadio}*`
-//       console.log(params)
-//     }
-
-//     const { data } = await axios.get(`https://b1f8182cac6670e1.mokky.dev/items?category=pizza`, {
-//       params
-//     })
-
-//     pizzas.value = data
-//     console.log(pizzas.value)
-//   } catch (err) {
-//     console.log(err)
-//   }
-// }
-// const getOtherProduct = async () => {
-//   try {
-//     const params = {
-//       sortBy: filters.sortBy,
-//       category: ['snack', 'drink', 'sauce']
-//     }
-
-//     const { data } = await axios.get(`https://b1f8182cac6670e1.mokky.dev/items`, {
-//       params
-//     })
-
-//     otherProducts.value = data
-//     console.log(otherProducts.value)
-//   } catch (err) {
-//     console.log(err)
-//   }
-// }
-
-// watch(store.getters.getFilters, console.log(1))
-// watch(filters, getOtherProduct)
-
 onMounted(async () => {
-  // await getItems()
-  // await getPizzas()
-  await store.dispatch('getPizzas')
-  await store.dispatch('getOtherProduct')
-  console.log(pizza.value)
-  console.log(cart.value)
+  await Promise.all([store.dispatch('getPizzas'), store.dispatch('getOtherProduct')])
 })
 </script>
 
@@ -151,6 +76,7 @@ onMounted(async () => {
           />
           <label for="meat" class="border-solid border rounded-2xl p-10">Мясная</label>
         </div>
+
         <div>
           <input
             @change="updateFilters"
@@ -197,23 +123,26 @@ onMounted(async () => {
         <option value="-price">По цене (дороже)</option>
       </select>
     </div>
-    <div class="mb-12">
+    <div class="mb-12" v-auto-animate>
       <h2 class="font-bold text-3xl mb-6">Пицца</h2>
-      <CardList :items="pizza" />
+      <CardList v-if="!isLoading" :items="pizza" />
+      <Loading v-else />
     </div>
-    <div class="mb-12">
+    <div class="mb-12" v-auto-animate>
       <h2 class="font-bold text-3xl mb-6">Снеки</h2>
-      <CardList :items="getOtherProductsByCategory('snack')" />
+      <CardList v-if="!isLoading" :items="getOtherProductsByCategory('snack')" />
+      <Loading v-else />
     </div>
-    <div class="mb-12">
+    <div class="mb-12" v-auto-animate>
       <h2 class="font-bold text-3xl mb-6">Напитки</h2>
-      <CardList :items="getOtherProductsByCategory('drink')" />
+      <CardList v-if="!isLoading" :items="getOtherProductsByCategory('drink')" />
+      <Loading v-else />
     </div>
-    <div>
+    <div v-auto-animate>
       <h2 class="font-bold text-3xl mb-6">Соусы</h2>
-      <CardList :items="getOtherProductsByCategory('sauce')" />
+      <CardList v-if="!isLoading" :items="getOtherProductsByCategory('sauce')" />
+      <Loading v-else />
     </div>
-    <div>{{ cart }}</div>
   </div>
 </template>
 

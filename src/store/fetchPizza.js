@@ -7,12 +7,17 @@ export const fetchPizza = {
     filters: {
       sortBy: 'name',
       sortByRadio: ''
-    }
+    },
+    isFirstRequest: true,
+    pizzaTypes: [],
+    isLoading: false
   }),
   getters: {
     getPizza: (state) => state.pizzas,
     getOtherProduct: (state) => state.otherProducts,
-    getFilters: (state) => state.filters
+    getFilters: (state) => state.filters,
+    getPizzaTypes: (state) => state.pizzaTypes,
+    getLoading: (state) => state.isLoading
   },
   mutations: {
     setPizza(state, pizzas) {
@@ -30,11 +35,24 @@ export const fetchPizza = {
 
     setFilters(state, filters) {
       state.filters = filters
+    },
+    setPizzaTypes(state, pizzaTypes) {
+      state.pizzaTypes = pizzaTypes
+    },
+    setFirstRequest(state, isFirstRequest) {
+      state.isFirstRequest = isFirstRequest
+    },
+    setLoading(state, isLoading) {
+      state.isLoading = isLoading
     }
   },
   actions: {
     async getPizzas({ state, commit, dispatch }) {
       try {
+        if (state.isFirstRequest) {
+          commit('setLoading', true)
+        }
+
         const params = {
           sortBy: state.filters.sortBy
         }
@@ -50,8 +68,16 @@ export const fetchPizza = {
           }
         )
         commit('setPizza', data)
+
+        if (state.isFirstRequest) {
+          // const pizzaType = [...new Set(data.map((item) => item.type))]
+          commit('setPizzaTypes', [...new Set(data.map((item) => item.type))])
+        }
       } catch (err) {
         console.log(err)
+      } finally {
+        commit('setFirstRequest', false)
+        commit('setLoading', false)
       }
     },
     async getOtherProduct({ state, commit, dispatch }) {
