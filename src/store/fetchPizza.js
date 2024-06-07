@@ -17,7 +17,8 @@ export const fetchPizza = {
     getOtherProduct: (state) => state.otherProducts,
     getFilters: (state) => state.filters,
     getPizzaTypes: (state) => state.pizzaTypes,
-    getLoading: (state) => state.isLoading
+    getLoading: (state) => state.isLoading,
+    getIsFirstRequest: (state) => state.isFirstRequest
   },
   mutations: {
     setPizza(state, pizzas) {

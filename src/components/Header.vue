@@ -9,6 +9,8 @@ const store = useStore()
 
 const totalPrice = computed(() => store.getters.cartPrice)
 
+const isFirstRequest = computed(() => store.getters.getIsFirstRequest)
+
 const hover = ref(false)
 
 const isNotification = ref(false)
@@ -16,28 +18,24 @@ const isNotification = ref(false)
 let timerId
 
 const viewCart = () => {
-  if (timerId) {
-    hover.value = false
-    clearTimeout(timerId)
-  }
-  isNotification.value = true
-  console.log('notify')
+  console.log(isFirstRequest.value)
+  if (!isFirstRequest.value) {
+    console.log(isFirstRequest.value)
+    if (timerId) {
+      hover.value = false
+      clearTimeout(timerId)
+    }
+    isNotification.value = true
+    console.log('notify')
 
-  timerId = setTimeout(() => (isNotification.value = false), 5000)
-  // setTimeout(() => (isNotification.value = false), 5000)
+    timerId = setTimeout(() => (isNotification.value = false), 5000)
+    // setTimeout(() => (isNotification.value = false), 5000)
+  }
 }
 
 const closeCart = () => {
-  console.log(121212)
   hover.value = false
 }
-
-watchEffect(() => {
-  if (isBasketPage) {
-    console.log(1111212)
-    closeCart()
-  }
-})
 
 watch(totalPrice, viewCart)
 </script>
@@ -53,7 +51,7 @@ watch(totalPrice, viewCart)
       </div>
     </div>
 
-    <ul class="flex gap-8 text-xl">
+    <ul class="flex gap-9 text-xl font-medium">
       <li>Пицца</li>
       <li>Закуски</li>
       <li>Напитки</li>
@@ -71,10 +69,14 @@ watch(totalPrice, viewCart)
         <router-link
           to="/drawer"
           class="text-xl text-white rounded-full bg-orange-500 px-4 pt-1 pb-2 transition ease-in hover:bg-orange-400"
+          @click="closeCart"
           >Корзина</router-link
         >
         <transition name="fade">
-          <DrawerModal v-if="(hover & (totalPrice != 0) || isNotification) & !isBasketPage" />
+          <DrawerModal
+            v-if="(hover & (totalPrice != 0) || isNotification) & !isBasketPage"
+            @close-cart="closeCart"
+          />
         </transition>
       </div>
     </div>

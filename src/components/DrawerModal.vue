@@ -9,6 +9,8 @@ const cartItems = computed(() => store.getters.cartProduct)
 
 const cartPrice = computed(() => store.getters.cartPrice)
 
+const emits = defineEmits(['close-cart'])
+
 const allDeleteFromCart = () => {
   store.dispatch('allDeleteFromCart')
 }
@@ -41,6 +43,7 @@ const allDeleteFromCart = () => {
       <router-link
         to="/drawer"
         class="py-3 px-5 border-2 border-solid border-orange-300 rounded-xl font-semibold transition ease-in hover:opacity-80"
+        @click="emits('close-cart')"
         >В корзину</router-link
       >
     </div>

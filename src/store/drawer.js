@@ -12,6 +12,9 @@ export const drawer = {
   },
 
   mutations: {
+    initializeCart(state, cart) {
+      state.cart = cart
+    },
     addToCart(state, product) {
       state.cart.push({
         id: product.id,
@@ -23,6 +26,7 @@ export const drawer = {
         doughType: product.doughType,
         counterItem: 1
       })
+      // localStorage.setItem('cart', JSON.stringify(state))
     },
     deleteCartItem(state, product) {
       const deleteItem = state.cart.find(
@@ -32,9 +36,11 @@ export const drawer = {
           item.pizzaSize == product.pizzaSize
       )
       state.cart.splice(state.cart.indexOf(deleteItem), 1)
+      // localStorage.setItem('cart', JSON.stringify(state))
     },
     allDeleteFromCart(state) {
       state.cart = []
+      // localStorage.setItem('cart', JSON.stringify(state))
     },
     incrementCounter(state, product) {
       const cartItem = state.cart.find(
@@ -44,6 +50,7 @@ export const drawer = {
           item.pizzaSize == product.pizzaSize
       )
       cartItem.counterItem++
+      // localStorage.setItem('cart', JSON.stringify(state))
     },
     decrementCounter(state, product) {
       const cartItem = state.cart.find(
@@ -53,10 +60,14 @@ export const drawer = {
           item.pizzaSize == product.pizzaSize
       )
       cartItem.counterItem--
+      // localStorage.setItem('cart', JSON.stringify(state))
     }
   },
 
   actions: {
+    initializeCartFromLocalStorage({ commit }, cart) {
+      commit('initializeCart', cart)
+    },
     addToCart({ commit, state }, product) {
       const cartItem = state.cart.find(
         (item) =>
