@@ -12,9 +12,13 @@
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.2",
+    "@vuelidate/core": "^2.0.3",
+    "@vuelidate/validators": "^2.0.4",
     "axios": "^1.6.8",
     "vue": "^3.4.21",
+    "vue-3-mask": "^0.0.1-alpha",
     "vue-router": "^4.3.0",
+    "vue-text-mask": "^6.1.2",
     "vuex": "^4.0.2"
   },
   "devDependencies": {

@@ -123,22 +123,22 @@ onMounted(async () => {
         <option value="-price">По цене (дороже)</option>
       </select>
     </div>
-    <div class="mb-12" v-auto-animate>
+    <div class="mb-12" v-auto-animate id="pizza">
       <h2 class="font-bold text-3xl mb-6">Пицца</h2>
       <CardList v-if="!isLoading" :items="pizza" />
       <Loading v-else />
     </div>
-    <div class="mb-12" v-auto-animate>
+    <div class="mb-12" v-auto-animate id="snack">
       <h2 class="font-bold text-3xl mb-6">Снеки</h2>
       <CardList v-if="!isLoading" :items="getOtherProductsByCategory('snack')" />
       <Loading v-else />
     </div>
-    <div class="mb-12" v-auto-animate>
+    <div class="mb-12" v-auto-animate id="drink">
       <h2 class="font-bold text-3xl mb-6">Напитки</h2>
       <CardList v-if="!isLoading" :items="getOtherProductsByCategory('drink')" />
       <Loading v-else />
     </div>
-    <div v-auto-animate>
+    <div v-auto-animate id="sauce">
       <h2 class="font-bold text-3xl mb-6">Соусы</h2>
       <CardList v-if="!isLoading" :items="getOtherProductsByCategory('sauce')" />
       <Loading v-else />

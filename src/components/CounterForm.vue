@@ -27,14 +27,17 @@ const decrementCartItem = (product) => {
 </script>
 
 <template>
-  <div>
+  <div class="counter-form">
     <button
       @click="decrementCartItem(product)"
       class="bg-orange-400 transition ease-in hover:bg-orange-500"
     >
       -
     </button>
-    <span class="text-sm mr-2 ml-2">{{ cartItem.counterItem }}</span>
+    <div class="counter-form__text inline-block mr-3 ml-3 text-center">
+      <span class="text-sm">{{ cartItem.counterItem }}</span>
+    </div>
+
     <button
       @click="incrementCartItem(product)"
       class="bg-orange-400 transition ease-in hover:bg-orange-500"
@@ -54,5 +57,12 @@ button {
   cursor: pointer;
   width: 30px;
   text-align: center;
+}
+
+.counter-form {
+}
+
+.counter-form__text {
+  width: 16px;
 }
 </style>

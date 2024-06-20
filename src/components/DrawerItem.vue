@@ -32,9 +32,18 @@ const props = defineProps({
     </div>
 
     <div><CounterForm :product="cartItem"></CounterForm></div>
-    <div class="flex gap-2">
-      <span class="text-xl">{{ price * counterItem }}&#8381;</span>
-      <img src="/pizza/close.svg" width="30" height="30" alt="" @click="deleteFromCart" />
+    <div class="cart-item__price">
+      <div class="flex justify-between gap-2">
+        <span class="text-xl inline-block">{{ price * counterItem }}&#8381;</span>
+        <img
+          src="/pizza/close.svg"
+          width="30"
+          height="30"
+          alt=""
+          @click="deleteFromCart"
+          class="inline-block"
+        />
+      </div>
     </div>
   </div>
   <!-- <div class="flex gap-x-10 justify-start items-center mb-3">
@@ -67,5 +76,10 @@ const props = defineProps({
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.cart-item__price {
+  width: 96px;
+  flex: none;
 }
 </style>

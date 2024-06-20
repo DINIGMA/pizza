@@ -52,10 +52,10 @@ watch(totalPrice, viewCart)
     </div>
 
     <ul class="flex gap-9 text-xl font-medium">
-      <li>Пицца</li>
-      <li>Закуски</li>
-      <li>Напитки</li>
-      <li>Соусы</li>
+      <router-link to="/#pizza"><li>Пицца</li></router-link>
+      <router-link to="/#snack"><li>Закуски</li></router-link>
+      <router-link to="/#drink"><li>Напитки</li></router-link>
+      <router-link to="/#sauce"><li>Соусы</li></router-link>
     </ul>
 
     <div class="flex items-end gap-4">

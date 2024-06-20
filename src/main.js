@@ -4,7 +4,6 @@ import axios from 'axios'
 import './assets/main.css'
 import App from './App.vue'
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
-
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Home from './pages/Home.vue'
@@ -27,7 +26,19 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: 'smooth'
+      }
+    } else if (savedPosition) {
+      return savedPosition
+    } else {
+      return { left: 0, top: 0 }
+    }
+  }
 })
 
 let isBasketPage = false
@@ -44,6 +55,7 @@ router.beforeEach((to, from, next) => {
 app.use(autoAnimatePlugin)
 app.use(router)
 app.use(store)
+
 app.mount('#app')
 
 export { isBasketPage }

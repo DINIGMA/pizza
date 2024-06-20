@@ -10,14 +10,15 @@ const cartItems = computed(() => store.getters.cartProduct)
 
 const cartPrice = computed(() => store.getters.cartPrice)
 
-const formData = reactive({})
+const orderId = computed(() => store.getters.getOrderId)
 
 const isCreatingOrder = ref(false)
 
+const OrderCreated = ref(false)
+
 const postFormData = async (data) => {
-  console.log(data)
-  // try {
-  // } catch {}
+  store.dispatch('createOrder', data)
+  OrderCreated.value = true
 }
 </script>
 
@@ -42,12 +43,24 @@ const postFormData = async (data) => {
       <OrderForm @postFormData="postFormData" :price="cartPrice" v-if="isCreatingOrder"></OrderForm>
     </div>
     <div v-else>
-      <p class="text-2xl mb-7">Корзина пустая:(</p>
-      <router-link
-        class="text-xl text-white rounded-full bg-orange-500 px-4 pt-1 pb-2 transition ease-in hover:bg-orange-400"
-        to="/"
-        >Смотреть пиццы</router-link
-      >
+      <div v-if="!OrderCreated">
+        <p class="text-2xl mb-7">Корзина пустая:(</p>
+        <router-link
+          class="text-xl text-white rounded-full bg-orange-500 px-4 pt-1 pb-2 transition ease-in hover:bg-orange-400"
+          to="/"
+          >Смотреть пиццы</router-link
+        >
+      </div>
+      <div v-else>
+        <p class="text-2xl mb-7">
+          Ваш заказ №{{ orderId }} оформен, Ожидайте звонка для подтверждения
+        </p>
+        <router-link
+          class="text-xl text-white rounded-full bg-orange-500 px-4 pt-1 pb-2 transition ease-in hover:bg-orange-400"
+          to="/"
+          >Смотреть пиццы</router-link
+        >
+      </div>
     </div>
   </div>
 </template>

@@ -1,6 +1,9 @@
+import axios from 'axios'
+
 export const drawer = {
   state: () => ({
-    cart: []
+    cart: [],
+    orderId: null
   }),
   getters: {
     cartProduct: (state) => state.cart,
@@ -8,12 +11,16 @@ export const drawer = {
       return getters.cartProduct.reduce((total, item) => {
         return total + item.price * item.counterItem
       }, 0)
-    }
+    },
+    getOrderId: (state) => state.orderId
   },
 
   mutations: {
     initializeCart(state, cart) {
       state.cart = cart
+    },
+    setOrderId(state, orderId) {
+      state.orderId = orderId
     },
     addToCart(state, product) {
       state.cart.push({
@@ -26,7 +33,6 @@ export const drawer = {
         doughType: product.doughType,
         counterItem: 1
       })
-      // localStorage.setItem('cart', JSON.stringify(state))
     },
     deleteCartItem(state, product) {
       const deleteItem = state.cart.find(
@@ -36,11 +42,9 @@ export const drawer = {
           item.pizzaSize == product.pizzaSize
       )
       state.cart.splice(state.cart.indexOf(deleteItem), 1)
-      // localStorage.setItem('cart', JSON.stringify(state))
     },
     allDeleteFromCart(state) {
       state.cart = []
-      // localStorage.setItem('cart', JSON.stringify(state))
     },
     incrementCounter(state, product) {
       const cartItem = state.cart.find(
@@ -50,7 +54,6 @@ export const drawer = {
           item.pizzaSize == product.pizzaSize
       )
       cartItem.counterItem++
-      // localStorage.setItem('cart', JSON.stringify(state))
     },
     decrementCounter(state, product) {
       const cartItem = state.cart.find(
@@ -60,7 +63,6 @@ export const drawer = {
           item.pizzaSize == product.pizzaSize
       )
       cartItem.counterItem--
-      // localStorage.setItem('cart', JSON.stringify(state))
     }
   },
 
@@ -101,6 +103,19 @@ export const drawer = {
       if (cartItem.counterItem > 1) commit('decrementCounter', product)
       else {
         commit('deleteCartItem', product)
+      }
+    },
+    async createOrder({ commit, state, getters }, formData) {
+      try {
+        const { data } = await axios.post('https://b1f8182cac6670e1.mokky.dev/orders', {
+          products: state.cart,
+          orderPrice: getters.cartPrice,
+          info: formData
+        })
+        commit('allDeleteFromCart')
+        commit('setOrderId', data.id)
+      } catch (err) {
+        console.log(err)
       }
     }
   }
